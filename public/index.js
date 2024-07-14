@@ -1,6 +1,7 @@
 // Load environment variables from .env file
 require('dotenv').config();
 
+
 // Function to get the color based on the stock symbol
 function getColor(stock) {
     if (stock === "GME") {
