@@ -1,8 +1,4 @@
-// Load environment variables from .env file
-require('dotenv').config();
-
-
-// Function to get the color based on the stock symbol
+// Function to get color based on stock symbol
 function getColor(stock) {
     if (stock === "GME") {
         return 'rgba(61, 161, 61, 0.7)';
@@ -20,89 +16,82 @@ function getColor(stock) {
 
 // Main function to fetch data and create charts
 async function main() {
+    // Selecting canvas elements from the DOM
+    const timeChartCanvas = document.querySelector('#time-chart');
+    const highestPriceChartCanvas = document.querySelector('#highest-price-chart');
+    const averagePriceChartCanvas = document.querySelector('#average-price-chart');
+
     try {
-        // Get API key from environment variables
-        const apiKey = process.env.API_KEY;
-
-        // Check if API key is available
-        if (!apiKey) {
-            throw new Error('API key is missing. Make sure to set API_KEY environment variable.');
-        }
-
-        // Selecting the chart elements from the DOM
-        const timeChartCanvas = document.querySelector('#time-chart');
-        const highestPriceChartCanvas = document.querySelector('#highest-price-chart');
-        const averagePriceChartCanvas = document.querySelector('#average-price-chart');
-
-        // Fetching stock data from the API
-        const response = await fetch(`https://api.twelvedata.com/time_series?symbol=GME,MSFT,DIS,BNTX&interval=1day&apikey=${apiKey}`);
+        // Fetching data from API
+        const response = await fetch(`https://api.twelvedata.com/time_series?symbol=GME,MSFT,DIS,BNTX&interval=1day&apikey=b2b0e11651294ee9a789558a1625b754`);
         const result = await response.json();
 
-        // Destructuring the result object to get individual stock data
+        // Destructure data
         const { GME, MSFT, DIS, BNTX } = result;
         const stocks = [GME, MSFT, DIS, BNTX];
 
-        // Reversing the order of values for each stock to have the latest data first
+        // Reverse values for each stock
         stocks.forEach(stock => stock.values.reverse());
 
-        // Creating the Time Chart
+        // Time Chart
         new Chart(timeChartCanvas.getContext('2d'), {
             type: 'line',
             data: {
-                labels: stocks[0].values.map(value => value.datetime), // Using datetime values as labels
+                labels: stocks[0].values.map(value => value.datetime), // Labels from datetime values
                 datasets: stocks.map(stock => ({
-                    label: stock.meta.symbol, // Stock symbol as the label
-                    backgroundColor: getColor(stock.meta.symbol), // Color based on stock symbol
-                    borderColor: getColor(stock.meta.symbol), // Border color based on stock symbol
-                    data: stock.values.map(value => parseFloat(value.high)) // High prices for the line chart
+                    label: stock.meta.symbol, // Stock symbol as label
+                    backgroundColor: getColor(stock.meta.symbol), // Color based on symbol
+                    borderColor: getColor(stock.meta.symbol), // Border color based on symbol
+                    data: stock.values.map(value => parseFloat(value.high)) // High values
                 }))
             }
         });
 
-        // Creating the High Chart
+        // High Chart
         new Chart(highestPriceChartCanvas.getContext('2d'), {
             type: 'bar',
             data: {
-                labels: stocks.map(stock => stock.meta.symbol), // Stock symbols as labels
+                labels: stocks.map(stock => stock.meta.symbol), // Labels from symbols
                 datasets: [{
-                    label: 'Highest', // Dataset label
-                    backgroundColor: stocks.map(stock => getColor(stock.meta.symbol)), // Colors based on stock symbols
-                    borderColor: stocks.map(stock => getColor(stock.meta.symbol)), // Border colors based on stock symbols
-                    data: stocks.map(stock => findHighest(stock.values)) // Highest prices for each stock
+                    label: 'Highest',
+                    backgroundColor: stocks.map(stock => getColor(stock.meta.symbol)), // Colors based on symbols
+                    borderColor: stocks.map(stock => getColor(stock.meta.symbol)), // Border colors based on symbols
+                    data: stocks.map(stock => findHighest(stock.values)) // Highest values
                 }]
             }
         });
 
-        // Creating the Average Chart
+        // Average Chart
         new Chart(averagePriceChartCanvas.getContext('2d'), {
             type: 'pie',
             data: {
-                labels: stocks.map(stock => stock.meta.symbol), // Stock symbols as labels
+                labels: stocks.map(stock => stock.meta.symbol), // Labels from symbols
                 datasets: [{
-                    label: 'Average', // Dataset label
-                    backgroundColor: stocks.map(stock => getColor(stock.meta.symbol)), // Colors based on stock symbols
-                    borderColor: stocks.map(stock => getColor(stock.meta.symbol)), // Border colors based on stock symbols
-                    data: stocks.map(stock => calculateAverage(stock.values)) // Average prices for each stock
+                    label: 'Average',
+                    backgroundColor: stocks.map(stock => getColor(stock.meta.symbol)), // Colors based on symbols
+                    borderColor: stocks.map(stock => getColor(stock.meta.symbol)), // Border colors based on symbols
+                    data: stocks.map(stock => calculateAverage(stock.values)) // Average values
                 }]
             }
         });
+
     } catch (error) {
-        console.error('Error fetching data:', error.message);
+        console.error('Error fetching data:', error);
     }
 }
 
-// Function to find the highest price in the given values
+// Function to find highest value in an array of values
 function findHighest(values) {
     let highest = 0;
     values.forEach(value => {
         if (parseFloat(value.high) > highest) {
-            highest = value.high;
+            highest = parseFloat(value.high);
         }
     });
     return highest;
 }
 
-// Function to calculate the average price in the given values
+// Function to calculate average value in an array of values
 function calculateAverage(values) {
     let total = 0;
     values.forEach(value => {
@@ -111,5 +100,5 @@ function calculateAverage(values) {
     return total / values.length;
 }
 
-// Calling the main function to execute the code
+// Call main function to start fetching data and creating charts
 main();
