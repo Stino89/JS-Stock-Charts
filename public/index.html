@@ -2,29 +2,41 @@
 <html>
 
 <head>
+    <!-- Title of the web page -->
     <title>Stock Tracker</title>
+    <!-- Ensures the webpage is responsive and adjusts to different screen sizes -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Linking Bootstrap CSS for styling the webpage -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 
 <body>
     <div id="root">
+        <!-- Container for the first chart: Stock Price Over Time -->
         <div class="container mt-5 mb-5">
             <h1 class="display-2">1. Stock Price Over Time</h1>
-            <canvas id="time-chart" ></canvas>
+            <!-- Canvas element for rendering the time chart -->
+            <canvas id="time-chart"></canvas>
         </div>
+        <!-- Container for the second chart: Highest Stock Price -->
         <div class="container mt-5 mb-5">
             <h1 class="display-2">2. Highest Stock Price</h1>
-            <canvas id="highest-price-chart" ></canvas>
+            <!-- Canvas element for rendering the highest price chart -->
+            <canvas id="highest-price-chart"></canvas>
         </div>
+        <!-- Container for the third chart: Average Stock Price -->
         <div class="container mt-5 mb-5">
             <h1 class="display-2">3. Average Stock Price</h1>
-            <canvas id="average-price-chart" ></canvas>
+            <!-- Canvas element for rendering the average price chart -->
+            <canvas id="average-price-chart"></canvas>
         </div>
     </div>
-    <!-- Our JavaScript Code  -->
+    <!-- Including Chart.js library for creating charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <!-- Including mock data JavaScript file -->
     <script src="mockData.js"></script>
+    <!-- Including main JavaScript file for the app logic -->
     <script src="index.js"></script>
 </body>
 
