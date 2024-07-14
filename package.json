@@ -9,6 +9,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "live-server": "^1.2.1"
+    "dotenv": "^16.4.5",
+    "live-server": "^1.2.0"
   }
 }

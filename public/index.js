@@ -1,3 +1,8 @@
+// index.js
+
+// Load environment variables from .env file
+require('dotenv').config();
+
 // Function to get the color based on the stock symbol
 function getColor(stock) {
     if (stock === "GME") {
@@ -16,13 +21,16 @@ function getColor(stock) {
 
 // Main function to fetch data and create charts
 async function main() {
+    // Get API key from environment variables
+    const apiKey = process.env.API_KEY;
+
     // Selecting the chart elements from the DOM
     const timeChartCanvas = document.querySelector('#time-chart');
     const highestPriceChartCanvas = document.querySelector('#highest-price-chart');
     const averagePriceChartCanvas = document.querySelector('#average-price-chart');
 
     // Fetching stock data from the API
-    const response = await fetch(`https://api.twelvedata.com/time_series?symbol=GME,MSFT,DIS,BNTX&interval=1day&apikey=b2b0e11651294ee9a789558a1625b754`);
+    const response = await fetch(`https://api.twelvedata.com/time_series?symbol=GME,MSFT,DIS,BNTX&interval=1day&apikey=${apiKey}`);
     const result = await response.json();
 
     // Destructuring the result object to get individual stock data
